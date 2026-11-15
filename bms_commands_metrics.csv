@@ -1,0 +1,26 @@
+Category,Field_Name,Request_Hex_Command,Response_Frame_Type,Byte_Offset,Data_Type,Endianness,Scaling_Formula,Unit,Example_Raw_Hex,Decoded_Value,Description
+Command,Query Cell Voltages,"EA D1 01 04 FF 02 F9 F5",0x02,N/A,N/A,N/A,N/A,N/A,"EA D1 01 04 FF 02 F9 F5",N/A,Polls individual cell voltages
+Command,Query Status & Alarms,"EA D1 01 04 FF 03 F8 F5",0x03,N/A,N/A,N/A,N/A,N/A,"EA D1 01 04 FF 03 F8 F5",N/A,Polls thermal sensors and fault status
+Command,Query Pack Metrics,"EA D1 01 04 FF 04 FF F5",0x04,N/A,N/A,N/A,N/A,N/A,"EA D1 01 04 FF 04 FF F5",N/A,"Polls SOC, SOH, current, capacities, cycles, intervals"
+Cell Metric,Cell 1 Voltage,N/A,0x02,"[9..10]",uint16,Big-Endian,"raw * 1",mV,0x0CFF,3327 mV,Cell 1 voltage (3.327 V)
+Cell Metric,Cell 2 Voltage,N/A,0x02,"[11..12]",uint16,Big-Endian,"raw * 1",mV,0x0CFF,3327 mV,Cell 2 voltage (3.327 V)
+Cell Metric,Cell 3 Voltage,N/A,0x02,"[13..14]",uint16,Big-Endian,"raw * 1",mV,0x0CFD,3325 mV,Cell 3 voltage (3.325 V)
+Cell Metric,Cell 4 Voltage,N/A,0x02,"[15..16]",uint16,Big-Endian,"raw * 1",mV,0x0CFF,3327 mV,Cell 4 voltage (3.327 V)
+Cell Metric,Pack Voltage (Sum),N/A,0x02,"[9..16]",uint32,Big-Endian,"(C1+C2+C3+C4)/1000.0",V,N/A,13.31 V,Accurate total pack voltage derived from cell sum
+Cell Metric,Cell Delta (Imbalance),N/A,0x02,"[9..16]",uint16,Big-Endian,"max(C1..C4) - min(C1..C4)",mV,N/A,2 mV,Difference between highest and lowest cell
+Temperature,Cell Temperature,N/A,0x03,"[14]",uint8,N/A,"raw - 40",°C,0x3D,21.0 °C,Internal cell temperature probe
+Temperature,Ambient Temperature,N/A,0x03,"[15]",uint8,N/A,"raw - 40",°C,0x3C,20.0 °C,Ambient environmental temperature probe
+Temperature,MOSFET Temperature,N/A,0x03,"[16]",uint8,N/A,"raw - 40",°C,0x3C,20.0 °C,BMS power switching MOSFET temperature
+Gauge Metric,State of Health (SOH),N/A,0x04,"[7]",uint8,N/A,"raw * 1",%,0x64,100 %,Battery health percentage (Tag 01)
+Gauge Metric,Cycle Count,N/A,0x04,"[9..10]",uint16,Big-Endian,"raw * 1",Cycles,0x0002,2,Cumulative full charge/discharge cycle count (Tag 02)
+Status,Discharging State,N/A,0x04,"[13]",uint8,N/A,"raw != 0",Boolean,0x01,ON,BMS discharge switch state (Tag 03)
+Gauge Metric,Full Rated Capacity,N/A,0x04,"[12..16]",uint32,Big-Endian,"raw / 1000.0",Ah,0x000186A0,100.0 Ah,Total nominal battery capacity (100000 mAh)
+Status,Charging State,N/A,0x04,"[19]",uint8,N/A,"raw != 0",Boolean,0x01,ON,BMS charge switch state (Tag 05)
+Gauge Metric,Remaining Capacity,N/A,0x04,"[18..22]",uint32,Big-Endian,"raw / 1000.0",Ah,0x00018678,99.96 Ah,Real-time remaining capacity (99.96 Ah)
+Gauge Metric,State of Charge (SOC),N/A,0x04,"Derived",float,N/A,"(Rem_Ah / Full_Ah) * 100.0",%,N/A,100 %,True battery charge percentage derived from Ah
+Gauge Metric,Pack Current (Signed),N/A,0x03,"[7..8]",int16,Big-Endian,"int16(raw) / 100.0",A,0x03E8,+10.0 A,Pack current in 0.01A units: positive=charging negative=discharging
+Timing,Remaining Charge Time,N/A,0x04,"[33..34]",uint16,Big-Endian,"raw * 1",Minutes,0x0000,0 min,Remaining charging duration estimate (Tag 0A)
+Timing,Current Charge Interval,N/A,0x04,"[36..37]",uint16,Big-Endian,"raw * 1",Hours,0x0001,1 h,Current continuous charge session duration (Tag 0B)
+Timing,Max Charge Interval,N/A,0x04,"[38..39]",uint16,Big-Endian,"raw * 1",Hours,0x0174,372 h,Maximum recorded charging interval (Tag 0B)
+Cell Metric,Max Cell Voltage,N/A,0x04,"[49..50]",uint16,Big-Endian,"raw * 1",mV,0x0CFF,3327 mV,Highest cell voltage reported by BMS
+Cell Metric,Min Cell Voltage,N/A,0x04,"[51..52]",uint16,Big-Endian,"raw * 1",mV,0x0CFD,3325 mV,Lowest cell voltage reported by BMS
